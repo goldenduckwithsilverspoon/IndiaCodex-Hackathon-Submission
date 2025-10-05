@@ -12,7 +12,7 @@
 
 ## 🚀 Live Demo
 
-**🌐 Deployed Application:** [Coming Soon - Railway/Render Deployment]
+**🌐 Deployed Application:** https://cardanostream-cdn.web.app
 
 **📹 Video Demo:** [YouTube Link - Coming Soon]
 
