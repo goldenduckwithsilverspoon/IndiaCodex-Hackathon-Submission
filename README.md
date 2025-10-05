@@ -14,10 +14,6 @@
 
 **🌐 Deployed Application:** https://cardanostream-cdn.web.app
 
-**📹 Video Demo:** [YouTube Link - Coming Soon]
-
-**🎨 Pitch Deck:** [Google Slides Link - Coming Soon]
-
 ---
 
 ## 📋 Table of Contents
