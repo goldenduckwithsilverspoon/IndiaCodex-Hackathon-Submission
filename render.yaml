@@ -1,0 +1,25 @@
+# CardanoStream CDN Node - Render Deployment
+
+services:
+  - type: web
+    name: cardanostream-cdn
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && pnpm build
+    startCommand: cd apps/cdn-node && node dist/index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: PORT
+        value: 3000
+      - key: DATA_DIR
+        value: /opt/render/project/data
+      - key: CARDANO_NETWORK
+        value: preprod
+      - key: NODE_ID
+        value: cardanostream-render-1
+      - key: BANDWIDTH_LIMIT_MBPS
+        value: 100
+      - key: STORAGE_LIMIT_GB
+        value: 50

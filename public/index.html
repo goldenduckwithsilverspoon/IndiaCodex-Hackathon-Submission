@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CardanoStream Lite</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+      header { display: flex; align-items: baseline; gap: .75rem; margin-bottom: 1rem; }
+      h1 { margin: 0; font-size: 1.5rem; }
+      .row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+      .card { border: 1px solid #8883; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: .5rem; border-bottom: 1px solid #8883; text-align: left; }
+      code { background: #8881; padding: .1rem .3rem; border-radius: 4px; }
+      .muted { opacity: .7; font-size: .9rem; }
+      .pill { font-size: .75rem; padding: .2rem .4rem; border-radius: 6px; background: #ddd3; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>CardanoStream Lite</h1>
+      <span class="muted">Local content-addressed storage prototype</span>
+    </header>
+
+    <section class="card">
+      <div class="row">
+        <input type="file" id="file" />
+        <button id="upload">Upload</button>
+        <span id="status" class="muted"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 1.1rem;">Files</h2>
+        <button id="refresh">Refresh</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>CID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Updated</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3 style="margin-top: 0">SDK Example</h3>
+      <pre><code>import { uploadFile, getFile } from '/sdk.js';
+
+const res = await uploadFile(file);
+const bytes = await getFile(res.cid);
+      </code></pre>
+    </section>
+
+    <script type="module" src="/sdk.js"></script>
+    <script type="module">
+      import { uploadFile, listFiles } from '/sdk.js';
+      const fileInput = document.getElementById('file');
+      const uploadBtn = document.getElementById('upload');
+      const refreshBtn = document.getElementById('refresh');
+      const rows = document.getElementById('rows');
+      const status = document.getElementById('status');
+
+      async function refresh() {
+        rows.innerHTML = '<tr><td colspan="6" class="muted">Loading…</td></tr>';
+        const { files } = await listFiles();
+        rows.innerHTML = files.map(f => `
+          <tr>
+            <td><code>${f.cid.slice(0, 8)}…</code></td>
+            <td>${f.name}</td>
+            <td class="pill">${f.contentType}</td>
+            <td>${(f.size/1024).toFixed(1)} KB</td>
+            <td class="muted">${new Date(f.updatedAt).toLocaleString()}</td>
+            <td><a href="/content/${f.cid}" target="_blank">Open</a></td>
+          </tr>
+        `).join('');
+      }
+
+      uploadBtn.addEventListener('click', async () => {
+        const file = fileInput.files?.[0];
+        if (!file) { status.textContent = 'Pick a file first'; return; }
+        status.textContent = 'Uploading…';
+        try {
+          const res = await uploadFile(file);
+          status.textContent = `Uploaded: ${res.cid}`;
+          await refresh();
+        } catch (e) {
+          console.error(e);
+          status.textContent = 'Upload failed';
+        }
+      });
+
+      refreshBtn.addEventListener('click', refresh);
+      refresh();
+    </script>
+  </body>
+  </html>

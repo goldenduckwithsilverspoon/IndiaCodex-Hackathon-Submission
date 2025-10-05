@@ -1,0 +1,14 @@
+name = "cardanostream/contracts"
+version = "0.1.0"
+plutus = "v3"
+compiler = "v1.1.0"
+license = "Apache-2.0"
+description = "CardanoStream smart contracts for decentralized CDN incentives"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "2.1.0"
+source = "github"
+
+[config.default]
+network_id = 0

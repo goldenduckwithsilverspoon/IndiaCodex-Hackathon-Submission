@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "public": "apps/cdn-node/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "api"
+      }
+    ]
+  },
+  "functions": {
+    "source": "apps/cdn-node",
+    "predeploy": [
+      "cd apps/cdn-node && npm run build"
+    ],
+    "runtime": "nodejs22"
+  }
+}

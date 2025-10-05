@@ -1,0 +1,31 @@
+{
+  "name": "cardanostream",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Decentralized CDN powered by Cardano blockchain and Masumi Network P2P infrastructure",
+  "packageManager": "pnpm@10.18.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "contracts/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "contracts:build": "cd contracts/cardano && aiken build",
+    "contracts:test": "cd contracts/cardano && aiken check",
+    "node:start": "node apps/cdn-node/dist/index.js",
+    "dashboard": "cd apps/dashboard && npm run dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.1.3",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
